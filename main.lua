@@ -1,4 +1,4 @@
-io.stdout:setvbuf('no')
+io.stdout:setvbuf('full')
 
 local vector = require("src/vector")
 local landerUtil = require("src/lander")
@@ -15,12 +15,29 @@ end
 function love.update(dt)
     lander.velocity.y = lander.velocity.y + gravity.y * dt
 
+    if(love.keyboard.isDown("right")) then
+        lander.angle = lander.angle + lander.angularSpeed * dt
+    elseif (love.keyboard.isDown("left")) then
+        lander.angle = lander.angle - lander.angularSpeed * dt
+    end
+
+    if(love.keyboard.isDown("space")) then
+        lander.isEngineActive = true
+        lander.velocity.y = lander.velocity.y + math.sin(lander.angle) * lander.thrustPower * dt
+        lander.velocity.x = lander.velocity.x + math.cos(lander.angle) * lander.thrustPower * dt
+    else
+        lander.isEngineActive = false
+    end
+
     lander.position.x = lander.position.x + lander.velocity.x
     lander.position.y = lander.position.y + lander.velocity.y
 end
 
 function love.draw()
-    love.graphics.draw(lander.sprite.spacecraft, lander.position.x, lander.position.y, math.rad(lander.angle), 1, 1, lander.center.x, lander.center.y)
+    love.graphics.draw(lander.sprite.spacecraft, lander.position.x, lander.position.y, lander.angle, 1, 1, lander.center.x, lander.center.y)
+    if(lander.isEngineActive) then
+        love.graphics.draw(lander.sprite.engine, lander.position.x, lander.position.y, lander.angle, 1, 1, lander.center.x, lander.center.y)
+    end
 end
 
 function resetScene()

@@ -12,8 +12,9 @@ landerFactory.new = function()
             engine = love.graphics.newImage(assetPath.."engine.png")
         },
         center = vector.new(),
-        angle = -90,
-        angularSpeed = 90,
+        angle = math.rad(-90),
+        angularSpeed = 3,
+        thrustPower = 3,
         isEngineActive = false
     }
 
