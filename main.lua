@@ -6,6 +6,7 @@ local screen = vector.new()
 local gravity = vector.new()
 local debug = false
 local dPressed = false
+local tau = math.pi * 2
 
 function love.load()
     screen.x = love.graphics.getWidth()
@@ -26,8 +27,14 @@ function love.update(dt)
 
     if(love.keyboard.isDown("right")) then
         lander.angle = lander.angle + lander.angularSpeed * dt
+        if (lander.angle >= tau) then
+            lander.angle = lander.angle - tau
+        end
     elseif (love.keyboard.isDown("left")) then
         lander.angle = lander.angle - lander.angularSpeed * dt
+        if (lander.angle < 0) then
+            lander.angle = lander.angle + tau
+        end
     end
     
     if(love.keyboard.isDown("space")) then
@@ -37,6 +44,8 @@ function love.update(dt)
     else
         lander.isEngineActive = false
     end
+
+    lander.velocity = limitSpeedToMaximum(lander.velocity, lander.maxSpeed)
 
     lander.position.x = lander.position.x + lander.velocity.x
     lander.position.y = lander.position.y + lander.velocity.y
@@ -66,6 +75,20 @@ function vectorLength(vector)
     return math.sqrt(vector.x * vector.x + vector.y * vector.y)
 end
 
+function vectorSquareLength(vector)
+    return vector.x * vector.x + vector.y * vector.y
+end
+
 function round(number)
     return math.floor(number * 100 +0.5) / 100
+end
+
+function limitSpeedToMaximum(vector, maxLength)
+    local squareLength = vectorSquareLength(vector);
+    if(squareLength > maxLength * maxLength) then
+        local length = math.sqrt( squareLength )
+        vector.x = vector.x / length * maxLength
+        vector.y = vector.y / length * maxLength
+    end
+    return vector
 end

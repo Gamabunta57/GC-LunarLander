@@ -15,6 +15,7 @@ landerFactory.new = function()
         angle = math.rad(270),
         angularSpeed = 3,
         thrustPower = 3,
+        maxSpeed = 3,
         isEngineActive = false
     }
 
