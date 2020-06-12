@@ -3,7 +3,7 @@ require("src/lib/vector")
 Spacecraft = {}
 
 function Spacecraft:new()
-    spacecraft = { -- ?
+    local spacecraft = {
         position = Vector:new(),
         angle = 0,
         origin = Vector:new(),
@@ -26,9 +26,9 @@ function Spacecraft:new()
 end
 
 function Spacecraft:getWidth()
-    return spacecraft.sprite:getWidth()
+    return self.sprite:getWidth()
 end
 
 function Spacecraft:getHeight()
-    return spacecraft.sprite:getHeight()
+    return self.sprite:getHeight()
 end
