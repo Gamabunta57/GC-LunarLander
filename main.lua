@@ -18,7 +18,7 @@ end
 function love.update(dt)
     gameState.currentState:update(dt)
 
-    if(gameState.newState ~= gameState.currentState) then
+    if(gameState.hasAskForStateChange()) then
         gameState:setState(gameState.newState)
         gameState.currentState:reset()
     end 
@@ -26,4 +26,8 @@ end
 
 function love.draw()
     gameState.currentState:draw()
+end
+
+function love.keypressed(key)
+    gameState.currentState:keyPressed(key)
 end
