@@ -34,12 +34,15 @@ function Menu:confirm()
 end
 
 function Menu:draw()
+    local selectSize = love.graphics.getFont():getWidth("> ");
     for i = 1, #(self.items) do
         local text = Lang[self.items[i].translation][CurrentLang];
+        local fullSize = (window.x - self.menuWidth) / 2;
         if self.index == i then 
             text = "> "..text
+            fullSize = fullSize - selectSize / 2
         end
-        love.graphics.printf(text, (window.x - self.menuWidth) / 2, window.y * 2 / 3 + (i-1) * self.rowSize, self.menuWidth, "center");
+        love.graphics.printf(text, fullSize, window.y * 2 / 3 + (i-1) * self.rowSize, self.menuWidth, "center");
     end
 end
 

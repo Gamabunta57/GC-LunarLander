@@ -4,7 +4,7 @@ PlayingState.__index = PlayingState;
 function PlayingState:new(gameScreen)
     local state = {
         screen = gameScreen,
-        gravity = Vector:new(0, 2),
+        gravity = Vector.new(0, 2),
         debug = false,
         isColliding = false,
         angleThreshold = 5,
@@ -15,16 +15,26 @@ function PlayingState:new(gameScreen)
 end
 
 function PlayingState:reset()
-    self.screen.spacecraft.position = Vector:new((window.x - self.screen.spacecraft:getWidth()) / 2, (window.y - self.screen.spacecraft:getHeight()) / 2)
-    self.screen.spacecraft.velocity = Vector:new();
+    self.screen.spacecraft.position = Vector.new((window.x - self.screen.spacecraft:getWidth()) / 2, (window.y - self.screen.spacecraft:getHeight()) / 2)
+    self.screen.spacecraft.velocity = Vector.new();
     self.screen.spacecraft:setEngineOn(false);
     self.screen.spacecraft.angle = math.rad(270);
+    self.screen.spacecraft.currentDyingTime = self.screen.spacecraft.dyingTime;
 
     self.screen.platform.position.y = window.y - self.screen.platform.height;
-    self.screen.platform.position.x = math.random( 0, window.x - self.screen.platform.width )
+    self.screen.platform.position.x = love.math.random( 0, window.x - self.screen.platform.width )
 end
 
 function PlayingState:update(dt)
+    if (self.screen.spacecraft:isDestroying()) then
+        self.screen.spacecraft.crashAnimation:update(dt)
+        self.screen.spacecraft.currentDyingTime = self.screen.spacecraft.currentDyingTime - dt
+    end
+
+    if(self.screen.spacecraft:hasDisapear()) then
+        gameState:setNewState(gameState.failScreen)
+    end
+
     if (not(self.screen.spacecraft:isFlying())) then
         return;
     end
@@ -36,6 +46,7 @@ function PlayingState:update(dt)
         self.screen.spacecraft:setEngineOn(true);
         self.screen.spacecraft.velocity.x = self.screen.spacecraft.velocity.x + math.cos(self.screen.spacecraft.angle) * self.screen.spacecraft.thrustPower * dt;
         self.screen.spacecraft.velocity.y = self.screen.spacecraft.velocity.y + math.sin(self.screen.spacecraft.angle) * self.screen.spacecraft.thrustPower * dt;
+        self.screen.spacecraft.flameAnimated:update(dt)
     else
         self.screen.spacecraft:setEngineOn(false);
     end
@@ -69,7 +80,6 @@ function PlayingState:update(dt)
                 gameState:setNewState(gameState.victoryScreen)
             else
                 self.screen.spacecraft:setAsDestroyed();
-                gameState:setNewState(gameState.failScreen)
             end
         else
             self.isColliding = false
@@ -77,12 +87,18 @@ function PlayingState:update(dt)
 
     if(self.screen.spacecraft:getBottom() > window.y) then
         self.screen.spacecraft:setAsDestroyed()
-        gameState:setNewState(gameState.failScreen)
     end
 end
 
 function PlayingState:draw()
-    love.graphics.rectangle("fill", self.screen.platform.position.x, self.screen.platform.position.y, self.screen.platform.width, self.screen.platform.height)
+    self.screen.platform:draw()
+    if self.screen.spacecraft:isEngineOn() then
+        self.screen.spacecraft.flameAnimated:draw(self.screen.spacecraft.position, self.screen.spacecraft.angle);
+    end
+    if (self.screen.spacecraft:isDestroying()) then
+        self.screen.spacecraft.crashAnimation:draw(self.screen.spacecraft.position)
+        return;
+    end
     love.graphics.draw(
         self.screen.spacecraft.sprite, 
         self.screen.spacecraft.position.x, self.screen.spacecraft.position.y, 
@@ -91,31 +107,22 @@ function PlayingState:draw()
         self.screen.spacecraft.origin.x, self.screen.spacecraft.origin.y,
         0, 0
     );
-    if self.screen.spacecraft:isEngineOn() then
-        love.graphics.draw(
-            self.screen.spacecraft.flameSprite, 
-            self.screen.spacecraft.position.x, self.screen.spacecraft.position.y, 
-            self.screen.spacecraft.angle, 
-            1, 1, 
-            self.screen.spacecraft.origin.x, self.screen.spacecraft.origin.y,
-            0, 0
-        );
-    end
-
+    
     if self.debug then
         love.graphics.print(self.screen.spacecraft:getSpeed(), 0 , 10)
         love.graphics.print(self.screen.spacecraft.angle, 0 , 20)
         love.graphics.print(self.screen.spacecraft.state, 0 , 30)
-        love.graphics.print(tostring(self.isColliding), 0 , 40)
+        love.graphics.setColor(255,0,0)
+        
         local left = self.screen.spacecraft:getLeft()
         local top = self.screen.spacecraft:getTop()
-
-        love.graphics.setColor(255,0,0)
         love.graphics.rectangle("line", left, top, self.screen.spacecraft:getRight() - left, self.screen.spacecraft:getBottom() - top)
-        love.graphics.rectangle("line", self.screen.platform.position.x, self.screen.platform.position.y, self.screen.platform.width, self.screen.platform.height)
+    
+        local pleft = self.screen.platform:getLeft()
+        local ptop = self.screen.platform:getTop()
+        love.graphics.rectangle("line", pleft, ptop, self.screen.platform:getRight() - pleft, self.screen.platform:getBottom() - ptop)
         love.graphics.setColor(255,255,255)
     end
-
 end
 
 function PlayingState:isSpaceCraftAndPlatformColliding()

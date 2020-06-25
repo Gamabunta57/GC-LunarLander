@@ -1,20 +1,13 @@
 Vector = {};
+Vector.__index = Vector;
 
-function Vector:new(x, y)
-    local Vector = {
+function Vector.new(x, y)
+    local v = {
         x = x or 0,
         y = y or 0
     };
-    setmetatable(Vector, self);
-    self.__index = self;
-    return Vector;
-end
-
-function Vector:copy()
-    local copy = Vector:new();
-    copy.x = self.x;
-    copy.y = self.y;
-    return copy;
+    setmetatable(v, Vector);
+    return v;
 end
 
 function Vector:squareLength() 
@@ -27,7 +20,7 @@ end
 
 function Vector:normalize() 
     local length = self:length();
-    local vector = self:copy();
+    local vector = Vector.new(self.x, self.y);
     vector.x = vector.x / length;
     vector.y = vector.y / length;
     return vector;

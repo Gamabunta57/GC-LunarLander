@@ -11,8 +11,11 @@ gameState = GameState:new();
 gameState:init()
 
 function love.load()
-    window = Vector:new(love.graphics.getWidth(), love.graphics.getHeight());
+    window = Vector.new(love.graphics.getWidth(), love.graphics.getHeight());
+    love.math.setRandomSeed(love.timer.getTime())
+    gameState.bgScreen:reset();
     gameState:setState(gameState.titleScreen);
+    --gameState:setState(gameState.bgScreen);
     gameState.currentState:reset();
 end
 
@@ -26,6 +29,7 @@ function love.update(dt)
 end
 
 function love.draw()
+    gameState.bgScreen:draw()
     gameState.currentState:draw()
 end
 

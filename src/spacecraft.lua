@@ -1,4 +1,5 @@
 require("src/lib/vector")
+require("src/lib/animatedSprite")
 
 Spacecraft = {
     availableStates = {"flying", "crashed", "landed", "engineOn"}
@@ -8,22 +9,30 @@ Spacecraft.__index = Spacecraft
 
 function Spacecraft.new()
     local spacecraft = {
-        position = Vector:new(),
+        position = Vector.new(),
         angle = 0,
-        origin = Vector:new(),
-        velocity = Vector:new(),
+        origin = Vector.new(),
+        velocity = Vector.new(),
         angularSpeed = 3,
         thrustPower = 5,
         state = "flying",
         sprite = love.graphics.newImage("assets/images/ship.png"),
         flameSprite = love.graphics.newImage("assets/images/engine.png"),
-        maxSpeed = 5
+        flameAnimated = AnimatedSprite.new(love.graphics.newImage("assets/images/rocket_burst.png"), 60, 25, 30, 1/60, Vector.new(0 ,0)),
+        crashAnimation = AnimatedSprite.new(love.graphics.newImage("assets/images/rocket_crash.png"), 155, 150, 42, 1/60, Vector.new(155/2 -  30, 150 / 2 - 10)),
+        maxSpeed = 5,
+        dyingTime = 1/60 * 42,
+        currentDyingTime = 1/60 * 42,
+        collider = {}
     }
 
     setmetatable(spacecraft, Spacecraft);
 
     spacecraft.origin.x = spacecraft.sprite:getWidth() / 2;
     spacecraft.origin.y = spacecraft.sprite:getHeight() / 2;
+    spacecraft.dyingTime = spacecraft.crashAnimation.timePerFrame * spacecraft.crashAnimation.frameCount;
+    spacecraft.currentDyingTime = spacecraft.dyingTime;
+    spacecraft.collider = Rectangle.new(7, 5,11,16)
 
     return spacecraft;
 end
@@ -37,19 +46,19 @@ function Spacecraft:getHeight()
 end
 
 function Spacecraft:getLeft()
-    return self.position.x - self:getWidth() / 2
+    return self.position.x + self.collider:getLeft() - self.origin.x
 end
 
 function Spacecraft:getRight()
-    return self.position.x + self:getWidth() / 2
+    return self.position.x + self.collider:getRight() - self.origin.x
 end
 
 function Spacecraft:getBottom()
-    return self.position.y + self:getHeight() / 2
+    return self.position.y + self.collider:getBottom() - self.origin.y
 end
 
 function Spacecraft:getTop()
-    return self.position.y - self:getHeight() / 2
+    return self.position.y + self.collider:getTop() - self.origin.y
 end
 
 function Spacecraft:getSpeed()
@@ -58,6 +67,14 @@ end
 
 function Spacecraft:isEngineOn()
     return self.state == "engineOn"
+end
+
+function Spacecraft:isDestroying()
+    return self.state == "crashed" and self.currentDyingTime > 0
+end
+
+function Spacecraft:hasDisapear()
+    return self.state == "crashed" and self.currentDyingTime <= 0;
 end
 
 function Spacecraft:isCrashed()

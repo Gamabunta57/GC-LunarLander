@@ -2,19 +2,20 @@ require("src/screen/game/gameScreen")
 require("src/screen/victoryScreen")
 require("src/screen/failScreen")
 require("src/screen/titleScreen")
+require("src/screen/bgScreen")
 
 local askForStateChange = false
 
 GameState = {}
+GameState.__index = GameState;
 
-function GameState:new()
+function GameState.new()
     local state = {
         currentState = {},
         newState = {},
         askForStateChange = false
     }
-    setmetatable(state, self)
-    self.__index = self;
+    setmetatable(state, GameState)
     return state;
 end
 
@@ -23,6 +24,7 @@ function GameState:init()
     self.gameScreen = GameScreen.new()
     self.victoryScreen = VictoryScreen.new()
     self.failScreen = FailScreen.new()
+    self.bgScreen = BGScreen.new()
 end
 
 function GameState:setState(state)
