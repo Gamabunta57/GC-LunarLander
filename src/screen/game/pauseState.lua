@@ -1,4 +1,5 @@
 require("assets/lang/strings")
+require("src/lib/menu")
 
 PauseState = {}
 PauseState.__index = PauseState
@@ -7,8 +8,27 @@ function PauseState:new(gameScreen)
     local state = {
         screen = gameScreen,
         currentIndex = 1,
-        menu = {"resume", "restart", "quitToTitle"},
-        menuWidth = 200
+        menu = Menu.new({
+            items = {
+                MenuItem.new({
+                    name = "resume",
+                    translation = "resume",
+                    callback = function() gameScreen.currentGameState = gameScreen.gameStates.playing; end
+                }),
+                MenuItem.new({
+                    name = "restart",
+                    translation = "restart",
+                    callback = function() gameState:goToGameState() end
+                }),
+                MenuItem.new({
+                    name = "quitToTitle",
+                    translation = "quitToTitle",
+                    callback = function() gameState:goToTitleScreenState() end
+                })
+            },
+            menuWidth = 200,
+            rowSize = 30
+        })
     }
     setmetatable(state, PauseState)
     return state
@@ -29,37 +49,22 @@ function PauseState:draw()
     love.graphics.setColor({1,1,1,1})
     love.graphics.printf(Lang.pause[CurrentLang], 0 , window.y / 3 , window.x, "center", 0, 1, 1)
 
-    for i = 1, #(self.menu) do
-        local menuItemString = Lang[self.menu[i]][CurrentLang]
-        if(self.currentIndex == i) then
-            menuItemString = "> "..menuItemString;
-        end
-        love.graphics.printf(menuItemString, (window.x - self.menuWidth)/ 2, window.y * 2 / 3 + (i-1) * 20, self.menuWidth, "center")
-    end
-
+    self.menu:draw()
 end
 
 function PauseState:keyPressed(key)
     if(key == "escape") then
         self.screen.currentGameState = self.screen.gameStates.playing
+        love.event.push("menuCancel")
     end
 
-    if(key == "down" and self.currentIndex < #(self.menu)) then
-        self.currentIndex = self.currentIndex + 1
-    elseif (key == "up" and self.currentIndex > 1) then
-        self.currentIndex = self.currentIndex - 1
+    if(key == "down") then
+        self.menu:next()
+    elseif (key == "up") then
+        self.menu:prev()
     end
 
-    if (key ~= "return") then
-        return;
-    end
-
-    local currentMenu = self.menu[self.currentIndex]
-    if (currentMenu == "resume") then
-        self.screen.currentGameState = self.screen.gameStates.playing
-    elseif (currentMenu == "restart") then
-        gameState:setNewState(gameState.gameScreen)
-    elseif (currentMenu == "quitToTitle") then
-        gameState:setNewState(gameState.titleScreen)
+    if (key == "return") then
+        self.menu:confirm()
     end
 end

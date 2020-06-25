@@ -9,7 +9,7 @@ GameScreen = {}
 setmetatable(GameScreen, Screen)
 GameScreen.__index = GameScreen
 
-function GameScreen:new()
+function GameScreen.new()
     local screen = {
         spacecraft = Spacecraft:new(),
         platform = Platform:new(),
@@ -23,7 +23,7 @@ function GameScreen:new()
     }
     screen.currentGameState = screen.gameStates.playing;
 
-    setmetatable(screen, self);
+    setmetatable(screen, GameScreen);
     return screen;
 end
 

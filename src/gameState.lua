@@ -5,12 +5,7 @@ require("src/screen/titleScreen")
 
 local askForStateChange = false
 
-GameState = {
-    titleScreen = TitleScreen:new(),
-    gameScreen = GameScreen:new(),
-    victoryScreen = VictoryScreen:new(),
-    failScreen = FailScreen:new()
-}
+GameState = {}
 
 function GameState:new()
     local state = {
@@ -21,6 +16,13 @@ function GameState:new()
     setmetatable(state, self)
     self.__index = self;
     return state;
+end
+
+function GameState:init()
+    self.titleScreen = TitleScreen.new()
+    self.gameScreen = GameScreen.new()
+    self.victoryScreen = VictoryScreen.new()
+    self.failScreen = FailScreen.new()
 end
 
 function GameState:setState(state)
@@ -36,4 +38,20 @@ end
 
 function GameState:hasAskForStateChange()
     return askForStateChange;
+end
+
+function GameState:goToGameState()
+    self:setNewState(self.gameScreen)
+end
+
+function GameState:goToTitleScreenState()
+    self:setNewState(self.titleScreen)
+end
+
+function GameState:goToVictoryState()
+    self:setNewState(self.victoryScreen)
+end
+
+function GameState:goToFailState()
+    self:setNewState(self.failScreen)
 end

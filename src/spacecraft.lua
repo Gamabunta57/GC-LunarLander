@@ -4,7 +4,9 @@ Spacecraft = {
     availableStates = {"flying", "crashed", "landed", "engineOn"}
 }
 
-function Spacecraft:new()
+Spacecraft.__index = Spacecraft
+
+function Spacecraft.new()
     local spacecraft = {
         position = Vector:new(),
         angle = 0,
@@ -18,10 +20,8 @@ function Spacecraft:new()
         maxSpeed = 5
     }
 
-    setmetatable(spacecraft, self);
-    self.__index = self;
+    setmetatable(spacecraft, Spacecraft);
 
-    print(spacecraft)
     spacecraft.origin.x = spacecraft.sprite:getWidth() / 2;
     spacecraft.origin.y = spacecraft.sprite:getHeight() / 2;
 
@@ -75,15 +75,21 @@ end
 function Spacecraft:setEngineOn(isEngineOn)
     if (isEngineOn) then
         self.state = "engineOn"
+        love.event.push("spaceshipEngineOn")
     else
         self.state = "flying"
+        love.event.push("spaceshipEngineOff")
     end   
 end
 
 function Spacecraft:setAsLanded()
     self.state = "landed"
+    love.event.push("spaceshipLanded")
+    love.event.push("spaceshipEngineOff")
 end
 
 function Spacecraft:setAsDestroyed()
     self.state = "crashed"
+    love.event.push("spaceshipCrashed")
+    love.event.push("spaceshipEngineOff")
 end
