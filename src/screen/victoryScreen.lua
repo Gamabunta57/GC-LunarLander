@@ -34,9 +34,15 @@ function VictoryScreen:reset()
 end
 
 function VictoryScreen:draw()
+    love.graphics.setColor({0,0,0,0.6})
+    love.graphics.rectangle("fill",0,0,window.x, window.y)
+
+    love.graphics.setColor(colors.success)
+    love.graphics.setFont(fonts.title)
     local string = Lang.victory[CurrentLang];
     love.graphics.printf(string, 0 , window.y / 3 , window.x, "center", 0, 1, 1)
-
+    
+    love.graphics.setFont(fonts.main)
     self.menu:draw()
 end
 

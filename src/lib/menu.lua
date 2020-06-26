@@ -10,6 +10,7 @@ function Menu.new(menu)
         rowSize = 30
     }
     menu.index = 1;
+    menu.selector = love.graphics.newImage("assets/images/selector.png")
     setmetatable(menu, Menu)
     return menu
 end
@@ -34,15 +35,23 @@ function Menu:confirm()
 end
 
 function Menu:draw()
-    local selectSize = love.graphics.getFont():getWidth("> ");
+    local hmargin = 30
+    local vmargin = 20
+    local topPos = window.y * 2 / 3 - vmargin;
+    local leftPos = (window.x - self.menuWidth) / 2 - hmargin;
+    local menuHeight = self.rowSize * #(self.items) + 1.5 * vmargin
+    love.graphics.setColor({0,0,0,0.8})
+    love.graphics.rectangle("fill", leftPos, topPos, self.menuWidth + 2 * hmargin, menuHeight)
+    love.graphics.setColor(colors.main)
+    love.graphics.setFont(fonts.main)
     for i = 1, #(self.items) do
         local text = Lang[self.items[i].translation][CurrentLang];
-        local fullSize = (window.x - self.menuWidth) / 2;
+        local yPos =  window.y * 2 / 3 + (i-1) * self.rowSize;
+        local xPos = (window.x - self.menuWidth) / 2;
         if self.index == i then 
-            text = "> "..text
-            fullSize = fullSize - selectSize / 2
+            love.graphics.draw(self.selector, xPos - 24, yPos + 1)
         end
-        love.graphics.printf(text, fullSize, window.y * 2 / 3 + (i-1) * self.rowSize, self.menuWidth, "center");
+        love.graphics.printf(text, xPos, yPos, self.menuWidth, "left");
     end
 end
 

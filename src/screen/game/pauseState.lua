@@ -47,8 +47,11 @@ function PauseState:draw()
     love.graphics.rectangle("fill",0,0,window.x, window.y)
 
     love.graphics.setColor({1,1,1,1})
+
+    love.graphics.setFont(fonts.title)
     love.graphics.printf(Lang.pause[CurrentLang], 0 , window.y / 3 , window.x, "center", 0, 1, 1)
 
+    love.graphics.setFont(fonts.main)
     self.menu:draw()
 end
 

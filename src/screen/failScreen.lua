@@ -33,8 +33,14 @@ function FailScreen:reset()
 end
 
 function FailScreen:draw()
+    love.graphics.setColor({0,0,0,0.6})
+    love.graphics.rectangle("fill",0,0,window.x, window.y)
+
     local string = Lang.fail[CurrentLang];
+    love.graphics.setFont(fonts.title)
+    love.graphics.setColor(colors.failed)
     love.graphics.printf(string, 0 , window.y / 3 , window.x, "center", 0, 1, 1)
+    
     self.menu:draw()
 end
 

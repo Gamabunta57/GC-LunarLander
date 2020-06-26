@@ -16,7 +16,7 @@ function Spacecraft.new()
         angularSpeed = 3,
         thrustPower = 5,
         state = "flying",
-        sprite = love.graphics.newImage("assets/images/ship.png"),
+        sprite = love.graphics.newImage("assets/images/rocket_very_small.png"),
         flameSprite = love.graphics.newImage("assets/images/engine.png"),
         flameAnimated = AnimatedSprite.new(love.graphics.newImage("assets/images/rocket_burst.png"), 60, 25, 30, 1/60, Vector.new(0 ,0)),
         crashAnimation = AnimatedSprite.new(love.graphics.newImage("assets/images/rocket_crash.png"), 155, 150, 42, 1/60, Vector.new(155/2 -  30, 150 / 2 - 10)),
@@ -32,7 +32,7 @@ function Spacecraft.new()
     spacecraft.origin.y = spacecraft.sprite:getHeight() / 2;
     spacecraft.dyingTime = spacecraft.crashAnimation.timePerFrame * spacecraft.crashAnimation.frameCount;
     spacecraft.currentDyingTime = spacecraft.dyingTime;
-    spacecraft.collider = Rectangle.new(7, 5,11,16)
+    spacecraft.collider = Rectangle.new(6, 8, 10, 14)
 
     return spacecraft;
 end

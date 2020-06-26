@@ -42,6 +42,8 @@ function BGScreen:reset()
 end
 
 function BGScreen:draw()
+    love.graphics.setColor({34 / 255, 32 / 255, 52 / 255, 1})
+    love.graphics.rectangle("fill",0 ,0, window.x, window.y)
     for i=0, self.dotCount do
         local dot = self.dots[i + 1];
         love.graphics.setColor(self.colors[dot.color])

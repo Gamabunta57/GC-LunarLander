@@ -23,13 +23,15 @@ function TitleScreen.new()
             },
             menuWidth = 200,
             rowSize = 30
-        })
+        }),
+        title = love.graphics.newImage("assets/images/title.png")
     }
     setmetatable(screen, TitleScreen);
     return screen;
 end
 
 function TitleScreen:draw()
+    love.graphics.draw(self.title, 20, 20)
     self.menu:draw()
 end
 

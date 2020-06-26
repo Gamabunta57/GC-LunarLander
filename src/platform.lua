@@ -10,13 +10,13 @@ function Platform:new()
         position = Vector.new(),
         height = 0,
         width = 0,
-        sprite = love.graphics.newImage("assets/images/platform.png"),
+        sprite = love.graphics.newImage("assets/images/platform2.png"),
         collider = {}
     }
     platform.width = platform.sprite:getWidth()
     platform.height = platform.sprite:getHeight()
 
-    platform.collider = Rectangle.new(0, 5, 32, 13)
+    platform.collider = Rectangle.new(0, 21, 32, 11)
 
     setmetatable(platform, self)
     return platform

@@ -1,7 +1,7 @@
 Lang = {
     victory = {
-        en = "Victory",
-        fr = "Victoire"
+        en = "Success",
+        fr = "Succès"
     },
     fail = {
         en = "Failed",
@@ -14,10 +14,6 @@ Lang = {
     quit = {
         en = "Quit",
         fr = "Quitter"
-    },
-    restart = {
-        en = "Restart",
-        fr = "Recommencer"
     },
     restart = {
         en = "Restart",
