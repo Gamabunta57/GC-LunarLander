@@ -15,7 +15,6 @@ function love.load()
     love.math.setRandomSeed(love.timer.getTime())
     gameState.bgScreen:reset();
     gameState:setState(gameState.titleScreen);
-    --gameState:setState(gameState.bgScreen);
     gameState.currentState:reset();
 end
 
@@ -56,5 +55,5 @@ love.handlers.menuCancel = function() AudioEngine.playSound(sounds.menuCancel) e
 love.handlers.startBgMusic = function() AudioEngine.playSound(musics.bg) end
 love.handlers.spaceshipEngineOn = function() AudioEngine.playSound(sounds.engineOn) end
 love.handlers.spaceshipEngineOff = function() AudioEngine.stopSound(sounds.engineOn) end
-love.handlers.spaceshipLanded = function() print("landed") end
+love.handlers.spaceshipLanded = function() end
 love.handlers.spaceshipCrashed = function() AudioEngine.playSound(sounds.spaceshippCrash) end

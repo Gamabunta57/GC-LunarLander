@@ -9,10 +9,10 @@ function BGScreen.new()
         dots = {},
         dotCount = 130,
         colors = {
-            rgb(127, 150, 224),
-            rgb(255, 152, 135),
-            rgb(192, 204, 239),
-            rgb(192, 204, 239),
+            rgb(176, 185, 214),
+            rgb(255, 222, 217),
+            rgb(215, 207, 227),
+            rgb(215, 207, 227),
         },
         bgSprite = love.graphics.newImage("assets/images/moon.png")
     }
@@ -29,7 +29,7 @@ function BGScreen:reset()
                 love.math.random(0, window.y)
             ),
             size = 1,
-            color = love.math.random(1, 3)
+            color = love.math.random(1, #(self.colors))
         }
 
 
