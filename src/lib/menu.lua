@@ -49,7 +49,10 @@ function Menu:draw()
         local yPos =  window.y * 2 / 3 + (i-1) * self.rowSize;
         local xPos = (window.x - self.menuWidth) / 2;
         if self.index == i then 
+            love.graphics.setColor(colors.selected)
             love.graphics.draw(self.selector, xPos - 24, yPos + 1)
+        else
+            love.graphics.setColor(colors.unselected)
         end
         love.graphics.printf(text, xPos, yPos, self.menuWidth, "left");
     end

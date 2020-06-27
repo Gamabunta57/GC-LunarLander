@@ -23,7 +23,8 @@ function Spacecraft.new()
         maxSpeed = 5,
         dyingTime = 1/60 * 42,
         currentDyingTime = 1/60 * 42,
-        collider = {}
+        collider = {},
+        fuel = 100
     }
 
     setmetatable(spacecraft, Spacecraft);

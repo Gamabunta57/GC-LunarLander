@@ -19,10 +19,14 @@ fonts = {
 colors = {
     main = {146 / 255, 211 / 255, 255 / 255, 1},
     bg = {0,0,0,0.6},
+    spaceBg = {34 / 255, 32 / 255, 52 / 255, 1},
     success = {106 / 255, 190 / 255, 48 / 255},
-    failed = {172  / 255, 50  / 255, 50  / 255}
+    failed = {172  / 255, 50  / 255, 50  / 255},
+    fuelBg = {172  / 255, 50  / 255, 50  / 255},
+    fuel = {106 / 255, 190 / 255, 48 / 255},
+    selected = {1,1,1,1},
+    unselected = {146 / 255, 211 / 255, 255 / 255, 1}
 }
-
 function love.load()
     window = Vector.new(love.graphics.getWidth(), love.graphics.getHeight());
     love.math.setRandomSeed(love.timer.getTime())
@@ -58,6 +62,7 @@ local sounds = {
     menuCancel = AudioEngine.getSound("sounds/menu_cancel.wav"),
     engineOn = AudioEngine.getLoop("sounds/thruster3.wav"),
     spaceshippCrash = AudioEngine.getSound("sounds/crash5.wav"),
+    yay = AudioEngine.getSound("sounds/yay.wav"),
 }
 
 local musics = {
@@ -72,3 +77,4 @@ love.handlers.spaceshipEngineOn = function() AudioEngine.playLoopOnce(sounds.eng
 love.handlers.spaceshipEngineOff = function() AudioEngine.pauseSound(sounds.engineOn) end
 love.handlers.spaceshipLanded = function() end
 love.handlers.spaceshipCrashed = function() AudioEngine.playSound(sounds.spaceshippCrash) end
+love.handlers.victory = function() AudioEngine.playSound(sounds.yay) end

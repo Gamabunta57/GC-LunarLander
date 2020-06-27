@@ -6,7 +6,7 @@ VictoryScreen = {}
 setmetatable(VictoryScreen, Screen)
 VictoryScreen.__index = VictoryScreen;
 
-function VictoryScreen.new()
+function VictoryScreen.new(gameScreen)
     local screen = {
         menu = Menu.new({
             items = {
@@ -23,7 +23,8 @@ function VictoryScreen.new()
             },
             menuWidth = 200,
             rowSize = 30
-        })
+        }),
+        gameScreen = gameScreen
     }
     setmetatable(screen, VictoryScreen)
     return screen
@@ -34,6 +35,7 @@ function VictoryScreen:reset()
 end
 
 function VictoryScreen:draw()
+    self.gameScreen:draw()
     love.graphics.setColor({0,0,0,0.6})
     love.graphics.rectangle("fill",0,0,window.x, window.y)
 

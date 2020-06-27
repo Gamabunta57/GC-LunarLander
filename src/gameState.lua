@@ -1,7 +1,7 @@
 require("src/screen/game/gameScreen")
 require("src/screen/victoryScreen")
 require("src/screen/failScreen")
-require("src/screen/titleScreen")
+require("src/screen/title/titleScreen")
 require("src/screen/bgScreen")
 
 local askForStateChange = false
@@ -22,8 +22,8 @@ end
 function GameState:init()
     self.titleScreen = TitleScreen.new()
     self.gameScreen = GameScreen.new()
-    self.victoryScreen = VictoryScreen.new()
-    self.failScreen = FailScreen.new()
+    self.victoryScreen = VictoryScreen.new(self.gameScreen)
+    self.failScreen = FailScreen.new(self.gameScreen)
     self.bgScreen = BGScreen.new()
 end
 

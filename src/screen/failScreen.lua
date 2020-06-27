@@ -5,7 +5,7 @@ FailScreen = {}
 setmetatable(FailScreen, Screen)
 FailScreen.__index = FailScreen;
 
-function FailScreen.new()
+function FailScreen.new(gameScreen)
     local screen = {
         menu = Menu.new({
             items = {
@@ -22,7 +22,8 @@ function FailScreen.new()
             },
             menuWidth = 200,
             rowSize = 30
-        })
+        }),
+        gameScreen = gameScreen
     }
     setmetatable(screen, FailScreen)
     return screen
@@ -33,6 +34,7 @@ function FailScreen:reset()
 end
 
 function FailScreen:draw()
+    self.gameScreen:draw()
     love.graphics.setColor({0,0,0,0.6})
     love.graphics.rectangle("fill",0,0,window.x, window.y)
 

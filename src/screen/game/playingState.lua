@@ -7,8 +7,8 @@ function PlayingState:new(gameScreen)
         gravity = Vector.new(0, 2),
         debug = false,
         isColliding = false,
-        angleThreshold = 5,
-        speedThreshold = 1,
+        angleThreshold = 2,
+        speedThreshold = 0.7,
     }
     setmetatable(state, PlayingState)
     return state
@@ -20,6 +20,7 @@ function PlayingState:reset()
     self.screen.spacecraft:setEngineOn(false);
     self.screen.spacecraft.angle = math.rad(270);
     self.screen.spacecraft.currentDyingTime = self.screen.spacecraft.dyingTime;
+    self.screen.spacecraft.fuel = 100
 
     self.screen.platform.position.y = window.y - self.screen.platform.height;
     self.screen.platform.position.x = love.math.random( 0, window.x - self.screen.platform.width )
@@ -42,11 +43,12 @@ function PlayingState:update(dt)
     self.screen.spacecraft.velocity.x = self.screen.spacecraft.velocity.x + self.gravity.x * dt
     self.screen.spacecraft.velocity.y = self.screen.spacecraft.velocity.y + self.gravity.y * dt
 
-    if (love.keyboard.isDown("space")) then
+    if (love.keyboard.isDown("space") and self.screen.spacecraft.fuel > 0) then
         self.screen.spacecraft:setEngineOn(true);
         self.screen.spacecraft.velocity.x = self.screen.spacecraft.velocity.x + math.cos(self.screen.spacecraft.angle) * self.screen.spacecraft.thrustPower * dt;
         self.screen.spacecraft.velocity.y = self.screen.spacecraft.velocity.y + math.sin(self.screen.spacecraft.angle) * self.screen.spacecraft.thrustPower * dt;
         self.screen.spacecraft.flameAnimated:update(dt)
+        self.screen.spacecraft.fuel = self.screen.spacecraft.fuel - dt * 20
     else
         self.screen.spacecraft:setEngineOn(false);
     end
@@ -77,6 +79,7 @@ function PlayingState:update(dt)
         if (math.abs(self.screen.spacecraft.angle - math.rad(270)) < self.angleThreshold
             and self.screen.spacecraft:getSpeed() < self.speedThreshold) then
                 self.screen.spacecraft:setAsLanded();
+                love.event.push("victory")
                 gameState:setNewState(gameState.victoryScreen)
             else
                 self.screen.spacecraft:setAsDestroyed();
@@ -99,15 +102,21 @@ function PlayingState:draw()
         self.screen.spacecraft.crashAnimation:draw(self.screen.spacecraft.position)
         return;
     end
-    love.graphics.draw(
-        self.screen.spacecraft.sprite, 
-        self.screen.spacecraft.position.x, self.screen.spacecraft.position.y, 
-        self.screen.spacecraft.angle, 
-        1, 1, 
-        self.screen.spacecraft.origin.x, self.screen.spacecraft.origin.y,
-        0, 0
-    );
-    
+    if not(self.screen.spacecraft:hasDisapear()) then
+        love.graphics.draw(
+            self.screen.spacecraft.sprite, 
+            self.screen.spacecraft.position.x, self.screen.spacecraft.position.y, 
+            self.screen.spacecraft.angle, 
+            1, 1, 
+            self.screen.spacecraft.origin.x, self.screen.spacecraft.origin.y,
+            0, 0
+        );
+        love.graphics.setColor(colors.fuelBg)
+        love.graphics.rectangle("fill", window.x - 50, (window.y - 100) / 2, 20, 100)
+        love.graphics.setColor(colors.fuel)
+        love.graphics.rectangle("fill", window.x - 50, (window.y - 100) / 2 + (100-self.screen.spacecraft.fuel), 20, self.screen.spacecraft.fuel)
+    end
+
     if self.debug then
         love.graphics.print(self.screen.spacecraft:getSpeed(), 0 , 10)
         love.graphics.print(self.screen.spacecraft.angle, 0 , 20)
