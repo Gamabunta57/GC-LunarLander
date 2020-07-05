@@ -1,4 +1,4 @@
-require("src/sound/AudioEngine")
+require("src/sound/audioEngine")
 
 Menu = {}
 Menu.__index = Menu

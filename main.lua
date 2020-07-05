@@ -1,4 +1,4 @@
-require("src/gamestate")
+require("src/gameState")
 require("src/sound/audioEngine")
 
 if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
@@ -57,24 +57,24 @@ end
 
 
 local sounds = {
-    menuChangeItem = AudioEngine.getSound("sounds/menu_item_change.wav"),
-    menuConfirm = AudioEngine.getSound("sounds/menu_item_confirm.wav"),
-    menuCancel = AudioEngine.getSound("sounds/menu_cancel.wav"),
-    engineOn = AudioEngine.getLoop("sounds/thruster3.wav"),
-    spaceshippCrash = AudioEngine.getSound("sounds/crash5.wav"),
-    yay = AudioEngine.getSound("sounds/yay.wav"),
+    menuChangeItem = audioEngine.getSound("sounds/menu_item_change.wav"),
+    menuConfirm = audioEngine.getSound("sounds/menu_item_confirm.wav"),
+    menuCancel = audioEngine.getSound("sounds/menu_cancel.wav"),
+    engineOn = audioEngine.getLoop("sounds/thruster3.wav"),
+    spaceshippCrash = audioEngine.getSound("sounds/crash5.wav"),
+    yay = audioEngine.getSound("sounds/yay.wav"),
 }
 
 local musics = {
-    bg = AudioEngine.getLoop("sounds/Andromeda Journey-trimed.wav")
+    bg = audioEngine.getLoop("sounds/Andromeda Journey-trimed.wav")
 }
 
-love.handlers.menuChangeItem = function() AudioEngine.playSound(sounds.menuChangeItem) end
-love.handlers.menuConfirm = function() AudioEngine.playSound(sounds.menuConfirm) end
-love.handlers.menuCancel = function() AudioEngine.playSound(sounds.menuCancel) end
-love.handlers.startBgMusic = function() AudioEngine.playLoopOnce(musics.bg)end
-love.handlers.spaceshipEngineOn = function() AudioEngine.playLoopOnce(sounds.engineOn) end
-love.handlers.spaceshipEngineOff = function() AudioEngine.pauseSound(sounds.engineOn) end
+love.handlers.menuChangeItem = function() audioEngine.playSound(sounds.menuChangeItem) end
+love.handlers.menuConfirm = function() audioEngine.playSound(sounds.menuConfirm) end
+love.handlers.menuCancel = function() audioEngine.playSound(sounds.menuCancel) end
+love.handlers.startBgMusic = function() audioEngine.playLoopOnce(musics.bg)end
+love.handlers.spaceshipEngineOn = function() audioEngine.playLoopOnce(sounds.engineOn) end
+love.handlers.spaceshipEngineOff = function() audioEngine.pauseSound(sounds.engineOn) end
 love.handlers.spaceshipLanded = function() end
-love.handlers.spaceshipCrashed = function() AudioEngine.playSound(sounds.spaceshippCrash) end
-love.handlers.victory = function() AudioEngine.playSound(sounds.yay) end
+love.handlers.spaceshipCrashed = function() audioEngine.playSound(sounds.spaceshippCrash) end
+love.handlers.victory = function() audioEngine.playSound(sounds.yay) end

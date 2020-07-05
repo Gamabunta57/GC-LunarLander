@@ -73,7 +73,7 @@ function MainMenu:keyPressed(key)
         self.menu:confirm()
     end
 
-    if self.menu.index ~= 2 then
+    if self.menu.index ~= 3 then
         return;
     end
 

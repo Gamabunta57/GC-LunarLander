@@ -17,7 +17,6 @@ function Spacecraft.new()
         thrustPower = 5,
         state = "flying",
         sprite = love.graphics.newImage("assets/images/rocket_very_small.png"),
-        flameSprite = love.graphics.newImage("assets/images/engine.png"),
         flameAnimated = AnimatedSprite.new(love.graphics.newImage("assets/images/rocket_burst.png"), 60, 25, 30, 1/60, Vector.new(0 ,0)),
         crashAnimation = AnimatedSprite.new(love.graphics.newImage("assets/images/rocket_crash.png"), 155, 150, 42, 1/60, Vector.new(155/2 -  30, 150 / 2 - 10)),
         maxSpeed = 5,

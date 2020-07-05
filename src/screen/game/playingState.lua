@@ -116,22 +116,6 @@ function PlayingState:draw()
         love.graphics.setColor(colors.fuel)
         love.graphics.rectangle("fill", window.x - 50, (window.y - 100) / 2 + (100-self.screen.spacecraft.fuel), 20, self.screen.spacecraft.fuel)
     end
-
-    if self.debug then
-        love.graphics.print(self.screen.spacecraft:getSpeed(), 0 , 10)
-        love.graphics.print(self.screen.spacecraft.angle, 0 , 20)
-        love.graphics.print(self.screen.spacecraft.state, 0 , 30)
-        love.graphics.setColor(255,0,0)
-        
-        local left = self.screen.spacecraft:getLeft()
-        local top = self.screen.spacecraft:getTop()
-        love.graphics.rectangle("line", left, top, self.screen.spacecraft:getRight() - left, self.screen.spacecraft:getBottom() - top)
-    
-        local pleft = self.screen.platform:getLeft()
-        local ptop = self.screen.platform:getTop()
-        love.graphics.rectangle("line", pleft, ptop, self.screen.platform:getRight() - pleft, self.screen.platform:getBottom() - ptop)
-        love.graphics.setColor(255,255,255)
-    end
 end
 
 function PlayingState:isSpaceCraftAndPlatformColliding()
@@ -142,10 +126,6 @@ function PlayingState:isSpaceCraftAndPlatformColliding()
 end
 
 function PlayingState:keyPressed(key)
-    if (key == "d") then
-        self.debug = not(self.debug)
-    end
-
     if (key == "escape") then
         self.screen.currentGameState = self.screen.gameStates.pause
     end
